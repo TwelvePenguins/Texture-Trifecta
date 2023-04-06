@@ -10,8 +10,9 @@ import SwiftUI
 
 struct DesignEditView: View {
     
-    var images: [String] = ["a", "b", "c", "d"] //Placeholders - Captured textures go here.
-    
+    var textures: [String] = ["a", "b", "c", "d"] //Placeholders - Captured textures go here.
+    var sections: [Section] = [Section(name: "PenguinTorso"), Section(name: "PenguinBeak"), Section(name: "PenguinBelly"), Section(name: "PenguinEye"), Section(name: "PenguinRFoot"), Section(name: "PenguinLFoot"), Section(name: "PenguinFlipper")]
+        
     var body: some View {
         NavigationView {
             VStack(alignment: .center) {
@@ -35,12 +36,35 @@ struct DesignEditView: View {
                 ScrollView(.vertical) {
                     LazyVGrid(columns: [GridItem(.flexible(maximum: 130)), GridItem(.flexible(maximum: 130))], alignment: .center) {
                         //Grid of textures
-                        ForEach(images, id: \.self) { image in
-                            Image(image)
+                        ForEach(textures, id: \.self) { texture in
+                            Image(texture)
                                 .resizable()
                                 .scaledToFill()
                                 .padding(10)
                         }
+                    }
+                }
+            }
+            ZStack{
+//                Image("Vector 1")
+//                    .mask {
+//                        Image("Vector 1")
+//                    }
+//                    .border(.red)
+                ForEach(sections) { section in
+                    if section.texture == nil {
+                        Button {
+                            print(section.name)
+
+                        } label: {
+                            Image(section.name)
+                                .scaledToFit()
+                        }
+                    } else {
+                        Image(section.texture!)
+                            .mask {
+                                Image(section.name)
+                            }
                     }
                 }
             }
