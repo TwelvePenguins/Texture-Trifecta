@@ -23,3 +23,15 @@ struct PenguinTorso: Shape {
     }
 }
 
+struct PenguinBelly: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let width = rect.size.width
+        let height = rect.size.height
+        path.move(to: CGPoint(x: 0.63284*width, y: 0.29497*height))
+        path.addCurve(to: CGPoint(x: 0.40862*width, y: 0.80899*height), control1: CGPoint(x: 0.54577*width, y: 0.27464*height), control2: CGPoint(x: 0.41698*width, y: 0.35781*height))
+        path.addCurve(to: CGPoint(x: 0.63284*width, y: 0.29497*height), control1: CGPoint(x: 0.85373*width, y: 0.91802*height), control2: CGPoint(x: 0.6806*width, y: 0.36577*height))
+        path.closeSubpath()
+        return path
+    }
+}

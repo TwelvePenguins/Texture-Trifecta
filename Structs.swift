@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct Section: Identifiable {
     var id = UUID()
-    var name: String
+    var name: any Shape
     var texture: String?
     var selected: Bool = false
 }

@@ -11,7 +11,8 @@ import SwiftUI
 struct DesignEditView: View {
     
     var textures: [String] = ["a", "b", "c", "d"] //Placeholders - Captured textures go here.
-    var sections: [Section] = [Section(name: "PenguinTorso"), Section(name: "PenguinBeak"), Section(name: "PenguinBelly"), Section(name: "PenguinEye"), Section(name: "PenguinRFoot"), Section(name: "PenguinLFoot"), Section(name: "PenguinFlipper")]
+    var sections: [Section] = [Section(name: PenguinTorso()), Section(name: PenguinBelly())]
+//                               , Section(name: "PenguinBeak"), Section(name: "PenguinBelly"), Section(name: "PenguinEye"), Section(name: "PenguinRFoot"), Section(name: "PenguinLFoot"), Section(name: "PenguinFlipper")]
         
     var body: some View {
         NavigationView {
@@ -51,22 +52,16 @@ struct DesignEditView: View {
 //                        Image("Vector 1")
 //                    }
 //                    .border(.red)
-                ForEach(sections) { section in
-                    if section.texture == nil {
-                        Button {
-                            print(section.name)
-
-                        } label: {
-                            Image(section.name)
-                                .scaledToFit()
-                        }
-                    } else {
-                        Image(section.texture!)
-                            .mask {
-                                Image(section.name)
-                            }
-                    }
-                }
+//                ForEach(sections, id: \.self) { section in
+//                    if section.texture == nil {
+//                        section.name()
+//                    } else {
+//                        Image(section.texture!)
+//                            .mask {
+//                                section.name()
+//                            }
+//                    }
+//                }
             }
         }
     }
