@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 
 struct DesignEditView: View {
+    
+    @ObservedObject var manager: DesignsManager
     var textures: [String] = ["a", "b", "c", "d"] //Placeholders - Captured textures go here.
 //                               , Section(name: "PenguinBeak"), Section(name: "PenguinBelly"), Section(name: "PenguinEye"), Section(name: "PenguinRFoot"), Section(name: "PenguinLFoot"), Section(name: "PenguinFlipper")]
         
@@ -45,32 +47,23 @@ struct DesignEditView: View {
                 }
             }
             ZStack{
-                Image("PenguinBelly")
-                    .contentShape(PenguinBelly())
-                    .onTapGesture {
-                        print("hello")
+                ForEach(manager.sections) { section in
+                    if section.texture == nil {
+                        if #available(iOS 16.0, *) {
+                            Image(section.name)
+                                .contentShape(AnyShape(section.actualShape))
+                                .onTapGesture {
+                                    print(section.name)
+                                }
+                        }
+                    } else {
+                        Image(section.texture!)
+                            .mask {
+                                Image(section.name)
+                                    .scaledToFit()
+                            }
                     }
-                Image("PenguinTorso")
-                    .contentShape(PenguinTorso())
-                    .onTapGesture {
-                        print("Torso")
-                    }
-                    
-//                Image("Vector 1")
-//                    .mask {
-//                        Image("Vector 1")
-//                    }
-//                    .border(.red)
-//                ForEach(sections, id: \.self) { section in
-//                    if section.texture == nil {
-//                        section.name()
-//                    } else {
-//                        Image(section.texture!)
-//                            .mask {
-//                                section.name()
-//                            }
-//                    }
-//                }
+                }
             }
         }
     }
