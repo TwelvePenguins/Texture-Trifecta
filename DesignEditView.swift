@@ -9,9 +9,7 @@ import Foundation
 import SwiftUI
 
 struct DesignEditView: View {
-    
     var textures: [String] = ["a", "b", "c", "d"] //Placeholders - Captured textures go here.
-    var sections: [Section] = [Section(name: PenguinTorso()), Section(name: PenguinBelly())]
 //                               , Section(name: "PenguinBeak"), Section(name: "PenguinBelly"), Section(name: "PenguinEye"), Section(name: "PenguinRFoot"), Section(name: "PenguinLFoot"), Section(name: "PenguinFlipper")]
         
     var body: some View {
@@ -47,6 +45,17 @@ struct DesignEditView: View {
                 }
             }
             ZStack{
+                Image("PenguinBelly")
+                    .contentShape(PenguinBelly())
+                    .onTapGesture {
+                        print("hello")
+                    }
+                Image("PenguinTorso")
+                    .contentShape(PenguinTorso())
+                    .onTapGesture {
+                        print("Torso")
+                    }
+                    
 //                Image("Vector 1")
 //                    .mask {
 //                        Image("Vector 1")

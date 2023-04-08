@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 class TodoManager: ObservableObject {
-    @Published var sections: [Section] = [] {
+    @Published var sections: [Section] = [Section(name: "PenguinTorso", shape: PenguinTorso()), Section(name: "PenguinBelly", shape: PenguinBelly())] {
         didSet {
             save()
         }
