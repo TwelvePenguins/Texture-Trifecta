@@ -10,16 +10,26 @@ import SwiftUI
 
 struct DesignEditView: View {
     
-    @ObservedObject var manager: DesignsManager
+    @State var penguinSections = [
+        Section(name: "PenguinTorso", shape: PenguinTorso()),
+        Section(name: "PenguinBelly", shape: PenguinBelly()),
+        Section(name: "PenguinEye", shape: PenguinEye()),
+        Section(name: "PenguinFlipper", shape: PenguinFlipper()),
+        Section(name: "PenguinLFoot", shape: PenguinLFoot()),
+        Section(name: "PenguinRFoot", shape: PenguinRFoot()),
+        Section(name: "PenguinBeak", shape: PenguinBeak())
+    ]
     var textures: [String] = ["a", "b", "c", "d"] //Placeholders - Captured textures go here.
     
     var body: some View {
         GeometryReader { geo in
-            NavigationStack {
-                HStack {
-                    VStack(alignment: .center) {
-                        Text("Textures")
-                        
+            HStack {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Textures")
+                        .font(.largeTitle)
+                        .bold()
+                        .padding(.leading, 40)
+                    VStack (alignment: .center) {
                         Button {
                             //Open camera functionality here
                         } label: {
@@ -48,41 +58,20 @@ struct DesignEditView: View {
                                 }
                             }
                         }
-                        .frame(height: geo.size.height * 0.7)
+                        .frame( width: geo.size.width * 0.3, height: geo.size.height * 0.7)
                     }
-                    .frame(minWidth: geo.size.width * 0.3)
-                    .scaledToFit()
-                    Divider()
-                    ZStack {
-                        ForEach($manager.sections) { $section in
-                            if section.texture == nil {
-                                Image(section.name)
-                                    .contentShape(AnyShape(section.actualShape))
-                                    .onTapGesture {
-                                        section.selected = true
-                                    }
-                            } else if section.selected {
-                                Image("SelectedMask")
-                                    .mask {
-                                        Image(section.name)
-                                            .scaledToFit()
-                                    }
-                            } else {
-                                ZStack {
-                                    Image(section.texture!)
-                                        .mask {
-                                            Image(section.name)
-                                                .scaledToFit()
-                                        }
-                                    if section.selected {
-                                        Image("SelectedMask")
-                                            .mask{
-                                                Image(section.name)
-                                                    .scaledToFit()
-                                            }
-                                    }
+                }
+                .scaledToFit()
+                Divider()
+#warning("RETHINK THIS WITH DRAG AND DROP")
+                ZStack {
+                    ForEach(penguinSections, id: \.self) { section in
+                        if section.texture == nil {
+                            Image(section.name)
+                                .contentShape(AnyShape(section.shape))
+                                .onTapGesture {
+                                    print(section.name)
                                 }
-                            }
                         }
                     }
                 }
@@ -90,3 +79,4 @@ struct DesignEditView: View {
         }
     }
 }
+

@@ -8,13 +8,7 @@
 import Foundation
 import SwiftUI
 
-protocol PenguinSection: Shape {
-    var name: String { get }
-}
-
-struct PenguinTorso: PenguinSection {
-    let name: String = "PenguinTorso"
-    
+struct PenguinTorso: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let width = rect.size.width
@@ -29,9 +23,7 @@ struct PenguinTorso: PenguinSection {
     }
 }
 
-struct PenguinBelly: PenguinSection {
-    let name: String = "PenguinBelly"
-    
+struct PenguinBelly: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let width = rect.size.width
@@ -44,9 +36,7 @@ struct PenguinBelly: PenguinSection {
     }
 }
 
-struct PenguinBeak: PenguinSection {
-    let name: String = "PenguinBeak"
-    
+struct PenguinBeak: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let width = rect.size.width
@@ -60,9 +50,7 @@ struct PenguinBeak: PenguinSection {
     }
 }
 
-struct PenguinFlipper: PenguinSection {
-    let name: String = "PenguinFlipper"
-    
+struct PenguinFlipper: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let width = rect.size.width
@@ -75,9 +63,7 @@ struct PenguinFlipper: PenguinSection {
     }
 }
 
-struct PenguinLFoot: PenguinSection {
-    let name: String = "PenguinLFoot"
-    
+struct PenguinLFoot: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let width = rect.size.width
@@ -95,9 +81,7 @@ struct PenguinLFoot: PenguinSection {
     }
 }
 
-struct PenguinRFoot: PenguinSection {
-    let name: String = "PenguinRFoot"
-    
+struct PenguinRFoot: Shape {    
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let width = rect.size.width
@@ -115,9 +99,7 @@ struct PenguinRFoot: PenguinSection {
     }
 }
 
-struct PenguinEye: PenguinSection {
-    let name: String = "PenguinEye"
-    
+struct PenguinEye: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let width = rect.size.width
