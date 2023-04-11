@@ -65,8 +65,8 @@ struct DesignEditView: View {
                 Divider()
 #warning("RETHINK THIS WITH DRAG AND DROP")
                 ZStack {
-                    ForEach(penguinSections, id: \.self) { section in
-                        if section.texture == nil {
+                    ForEach($penguinSections) { $section in
+                        if section.isTextured == false {
                             Image(section.name)
                                 .contentShape(AnyShape(section.shape))
                                 .onTapGesture {
