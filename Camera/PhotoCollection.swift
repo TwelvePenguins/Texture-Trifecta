@@ -8,13 +8,9 @@
 import Photos
 import os.log
 
-/*#-code-walkthrough(pc.observablePublished)*/
 class PhotoCollection: NSObject, ObservableObject {
     
-    /*#-code-walkthrough(pc.photoAssets)*/
     @Published var photoAssets: PhotoAssetCollection = PhotoAssetCollection(PHFetchResult<PHAsset>())
-    /*#-code-walkthrough(pc.photoAssets)*/
-    /*#-code-walkthrough(pc.observablePublished)*/
     
     var identifier: String? {
         assetCollection?.localIdentifier

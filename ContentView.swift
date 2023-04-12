@@ -5,9 +5,9 @@ struct ContentView: View {
     var body: some View {
         DesignEditView()
             .onAppear {
-                print(getPicturesDirectory())
-                createDirectory(name: "All Textures", path: getPicturesDirectory())
-                createDirectory(name: "Penguin Textures", path: getPicturesDirectory())
+                print(getPicturesDirectoryURL())
+                createDirectory(name: "All Textures", path: getPicturesDirectoryURL())
+                createDirectory(name: "Penguin Textures", path: getPicturesDirectoryURL())
             }
     }
 }

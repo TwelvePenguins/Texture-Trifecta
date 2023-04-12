@@ -9,9 +9,14 @@ import Foundation
 
 let fm = FileManager()
 
-func getPicturesDirectory() -> URL {
+func getPicturesDirectoryURL() -> URL {
     let paths = fm.urls(for: .picturesDirectory, in: .userDomainMask)
     return paths[0]
+}
+
+func getPicturesDirectoryString() -> String {
+    let strings = NSSearchPathForDirectoriesInDomains(.picturesDirectory, .userDomainMask, false)
+    return strings[0]
 }
 
 func createDirectory(name: String, path: URL) {
@@ -22,18 +27,11 @@ func createDirectory(name: String, path: URL) {
     }
 }
 
-//class FileManager {
-//
-//    init() {
-//        let fm = FileManager()
-//        fm.createDirectory(at: <#T##URL#>, withIntermediateDirectories: <#T##Bool#>, attributes: <#T##[FileAttributeKey : Any]?#>)
-//    }
-//
-//    func getTextureDirectoryURL() -> URL {
-//        var doCreateDirectory: Bool
-//
-//        FileManager.create
-//
-//
-//    }
-//}
+func findSubPath(target: String) -> String {
+    return fm.subpaths(atPath: getPicturesDirectoryString())!.first(where: {$0 == target}) ?? ""
+    //Force unwrap since directories are created upon initialisation
+}
+
+func addImage(data: Data, targetDirectoryName: String) {
+    fm.createFile(atPath: findSubPath(target: targetDirectoryName), contents: data)
+}
