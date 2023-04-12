@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>SSC 2023.swiftpm-Package.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>SSC 2023.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -18,6 +23,11 @@
 			<true/>
 		</dict>
 		<key>SSC 2023</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>SSC 2023.swiftpm</key>
 		<dict>
 			<key>primary</key>
 			<true/>
