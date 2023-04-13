@@ -108,7 +108,7 @@ final class DataModel: ObservableObject {
         Task {
             do {
                 try await photoCollection.addImage(imageData)
-                addImage(data: imageData, targetDirectoryName: "All Textures")
+                addImage(data: imageData, targetDirectoryName: "AllTextures")
                 logger.debug("Added image data to photo collection.")
             } catch let error {
                 logger.error("Failed to add image to photo collection: \(error.localizedDescription)")
