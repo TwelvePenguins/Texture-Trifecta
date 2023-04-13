@@ -36,8 +36,10 @@ func findDirectoryPath(target: String) -> URL {
 }
 
 func addImage(data: Data, targetDirectoryName: String) -> Bool {
-    let url = findDirectoryPath(target: targetDirectoryName).appendingPathComponent("Yes", conformingTo: .image)
     
+//    fm.createFile(atPath: findDirectoryPath(target: "AllTextures").path(), contents: data)
+    let url = findDirectoryPath(target: targetDirectoryName).appendingPathComponent("Yes.png")
+
     do {
         try data.write(to: url)
         return true
