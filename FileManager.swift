@@ -24,10 +24,26 @@ func createDirectory(name: String, path: URL) {
     }
 }
 
-func findSubPath(target: String) -> String {
-    return fm.subpaths(atPath: getDocumentDirectory().path())!.first(where: {$0 == target}) ?? ""
+func findDirectoryPath(target: String) -> URL {
+    do {
+        let contents = try fm.contentsOfDirectory(at: getDocumentDirectory(), includingPropertiesForKeys: [.nameKey, .pathKey]).map({$0.path()})
+        let finalString = contents.filter({$0.contains("/\(target)/")})
+        return URL(string: finalString[0])!
+    } catch {
+        print("Error when fetching contents of directory")
+        return getDocumentDirectory()
+    }
 }
 
-func addImage(data: Data, targetDirectoryName: String) {
-    fm.createFile(atPath: findSubPath(target: targetDirectoryName), contents: data)
+func addImage(data: Data, targetDirectoryName: String) -> Bool {
+    let url = findDirectoryPath(target: targetDirectoryName).appendingPathComponent("Yes", conformingTo: .image)
+    
+    do {
+        try data.write(to: url)
+        return true
+    } catch {
+        print("Error adding image")
+        return false
+    }
 }
+#warning("This doesn't work. :(")

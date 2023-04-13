@@ -2,6 +2,13 @@
 
 ## To implement: 
 - Drag & Drop
+- Show folder contents in gallery and textures selection panel
+
+## Good to have: 
+- Fix navigation bar in CamerView and PhotoItemView
+- Add tap to focus
+
+https://github.com/rorodriguez116/SwiftCamera
 
 //
 //  DesignsManager.swift
