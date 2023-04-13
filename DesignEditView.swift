@@ -19,7 +19,7 @@ struct DesignEditView: View {
         Section(name: "PenguinRFoot", shape: PenguinRFoot()),
         Section(name: "PenguinBeak", shape: PenguinBeak())
     ]
-    var textures: [String] = ["a", "b", "c", "d"] //Placeholders - Captured textures go here.
+    @State var allTextures: [UIImage] = [] //Placeholders - Captured textures go here.
     
     @State var dropImage: [Image] = [Image("PenguinTorso"),
                                      Image("PenguinBelly"),
@@ -60,12 +60,13 @@ struct DesignEditView: View {
                             ScrollView(.vertical) {
                                 LazyVGrid(columns: [GridItem(.flexible(maximum: 130)), GridItem(.flexible(maximum: 130))], alignment: .center) {
                                     //Grid of textures
-                                    ForEach(textures, id: \.self) { texture in
-                                        Image(texture)
+                                    ForEach(allTextures, id: \.self) { texture in
+                                        Image(uiImage: texture)
                                             .resizable()
                                             .scaledToFill()
                                             .padding(10)
-                                            .draggable(Image(texture))
+                                            .draggable(Image(uiImage: texture)
+)
                                     }
                                 }
                             }
@@ -93,6 +94,9 @@ struct DesignEditView: View {
                     }
                 }
             }
+        }
+        .onAppear {
+            allTextures = retrieveImages(in: "AllTextures")
         }
     }
 }

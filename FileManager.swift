@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 import os.log
 
 let fm = FileManager()
@@ -48,4 +49,25 @@ func addImage(data: Data, targetDirectoryName: String) -> Bool {
         print(error.localizedDescription)
         return false
     }
+}
+
+func findFilesURL(in directory: String) -> [URL] {
+    do {
+        let URLs = try fm.contentsOfDirectory(at: findDirectoryURL(target: directory), includingPropertiesForKeys: [.nameKey, .pathKey])
+        return URLs
+    } catch {
+        print(error.localizedDescription)
+        return [getDocumentDirectory()]
+    }
+}
+
+func retrieveImages(in directory: String) -> [UIImage] {
+    let filePaths = findFilesURL(in: directory).map { $0.path(percentEncoded: false) }
+    var imageArray: [UIImage] = []
+    
+    for path in filePaths {
+        imageArray.append(UIImage(contentsOfFile: path)!)
+    }
+    
+    return imageArray
 }
