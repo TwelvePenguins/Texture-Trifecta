@@ -21,6 +21,15 @@ struct DesignEditView: View {
     ]
     var textures: [String] = ["a", "b", "c", "d"] //Placeholders - Captured textures go here.
     
+    @State var dropImage: [Image] = [Image("PenguinTorso"),
+                                     Image("PenguinBelly"),
+                                     Image("PenguinEye"),
+                                     Image("PenguinFlipper"),
+                                     Image("PenguinLFoot"),
+                                     Image("PenguinRFoot"),
+                                     Image("PenguinBeak"),
+    ]
+    
     var body: some View {
         GeometryReader { geo in
             NavigationStack {
@@ -56,24 +65,31 @@ struct DesignEditView: View {
                                             .resizable()
                                             .scaledToFill()
                                             .padding(10)
+                                            .draggable(Image(texture))
                                     }
                                 }
                             }
-                            .frame( width: geo.size.width * 0.3, height: geo.size.height * 0.7)
+                            .frame(width: geo.size.width * 0.3, height: geo.size.height * 0.7)
                         }
                     }
                     .scaledToFit()
                     Divider()
-#warning("RETHINK THIS WITH DRAG AND DROP")
                     ZStack {
                         ForEach($penguinSections) { $section in
-                            if section.isTextured == false {
-                                Image(section.name)
-                                    .contentShape(AnyShape(section.shape))
-                                    .onTapGesture {
-                                        print(section.name)
-                                    }
-                            }
+                            dropImage[penguinSections.firstIndex(of: section)!]
+                                .dropDestination(for: Image.self) { items, location in
+                                    dropImage[penguinSections.firstIndex(of: section)!] = items.first ?? Image(section.name)
+                                    return true
+                                }
+                                .contentShape(AnyShape(section.shape))
+                                .scaledToFit()
+                                .frame(maxWidth: geo.size.width * 0.6)
+                                .mask {
+                                    Image(section.name)
+                                        .border(.red)
+                                        .scaledToFit()
+                                        .frame(maxWidth: geo.size.width * 0.4)
+                                }
                         }
                     }
                 }
