@@ -86,9 +86,8 @@ struct DesignEditView: View {
                                 .frame(maxWidth: geo.size.width * 0.6)
                                 .mask {
                                     Image(section.name)
-                                        .border(.red)
                                         .scaledToFit()
-                                        .frame(maxWidth: geo.size.width * 0.4)
+                                        .frame(maxWidth: geo.size.width * 0.6)
                                 }
                         }
                     }
