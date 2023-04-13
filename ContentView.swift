@@ -9,7 +9,7 @@ struct ContentView: View {
                 
                 createDirectory(name: "AllTextures", path: getDocumentDirectory())
                 createDirectory(name: "PenguinTextures", path: getDocumentDirectory())
-                print(findDirectoryPath(target: "AllTextures"))
+                print(findDirectoryURL(target: "AllTextures"))
                 
 //                let data: Data = "Penguin".data(using: .utf8)!
                 let data = UIImage(named: "a", in: nil, with: .none)?.pngData()

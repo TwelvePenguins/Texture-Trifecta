@@ -1,8 +1,9 @@
 #  TODO
 
 ## To implement: 
-- Drag & Drop
 - Show folder contents in gallery and textures selection panel
+- final screen
+- guider
 
 ## Good to have: 
 - Fix navigation bar in CamerView and PhotoItemView

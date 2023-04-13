@@ -24,11 +24,12 @@ func createDirectory(name: String, path: URL) {
     }
 }
 
-func findDirectoryPath(target: String) -> URL {
+func findDirectoryURL(target: String) -> URL {
     do {
-        let contents = try fm.contentsOfDirectory(at: getDocumentDirectory(), includingPropertiesForKeys: [.nameKey, .pathKey]).map({$0.path()})
-        let finalString = contents.filter({$0.contains("/\(target)/")})
-        return URL(string: finalString[0])!
+        let URLs = try fm.contentsOfDirectory(at: getDocumentDirectory(), includingPropertiesForKeys: [.nameKey, .pathKey])
+        let strings = URLs.map({$0.path()})
+        let finalString = strings.filter({$0.contains("/\(target)/")})
+        return URLs[strings.firstIndex(of: finalString[0])!]
     } catch {
         print("Error when fetching contents of directory")
         return getDocumentDirectory()
@@ -38,14 +39,13 @@ func findDirectoryPath(target: String) -> URL {
 func addImage(data: Data, targetDirectoryName: String) -> Bool {
     
 //    fm.createFile(atPath: findDirectoryPath(target: "AllTextures").path(), contents: data)
-    let url = findDirectoryPath(target: targetDirectoryName).appendingPathComponent("Yes.png")
+    let url = findDirectoryURL(target: targetDirectoryName).appendingPathComponent("Yes.png")
 
     do {
         try data.write(to: url)
         return true
     } catch {
-        print("Error adding image")
+        print(error.localizedDescription)
         return false
     }
 }
-#warning("This doesn't work. :(")
