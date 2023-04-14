@@ -1,18 +1,14 @@
 import SwiftUI
 import Photos
 
-/*#-code-walkthrough(piv.intro)*/
 struct PhotoItemView: View {
-/*#-code-walkthrough(piv.intro)*/
-    /*#-code-walkthrough(piv.asset)*/
     var asset: PhotoAsset
-    /*#-code-walkthrough(piv.asset)*/
     var cache: CachedImageManager?
     var imageSize: CGSize
     
     @State private var image: Image?
     @State private var imageRequestID: PHImageRequestID?
-
+    
     var body: some View {
         
         Group {

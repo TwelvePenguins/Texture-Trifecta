@@ -7,25 +7,17 @@
 
 import SwiftUI
 
-/*#-code-walkthrough(cv.intro)*/
 struct CameraView: View {
-    /*#-code-walkthrough(cv.intro)*/
-    /*#-code-walkthrough(cv.observedObject)*/
     @StateObject private var model = DataModel()
-    /*#-code-walkthrough(cv.observedObject)*/
     
     private static let barHeightFactor = 0.15
     
-    /*#-code-walkthrough(delayedShutter.delayCount)*/
-    /*#-code-walkthrough(delayedShutter.delayCount)*/
     
     var body: some View {
         
         NavigationStack {
             GeometryReader { geometry in
-                /*#-code-walkthrough(previewflow.viewPreviews)*/
-                ViewfinderView(image: /*#-code-walkthrough(previewflow.binding)*/ $model.viewfinderImage /*#-code-walkthrough(previewflow.binding)*/)
-                /*#-code-walkthrough(previewflow.viewPreviews)*/
+                ViewfinderView(image: $model.viewfinderImage)
                     .overlay(alignment: .bottom) {
                         buttonsView()
                             .frame(height: geometry.size.height * Self.barHeightFactor)

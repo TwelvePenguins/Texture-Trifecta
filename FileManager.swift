@@ -86,6 +86,3 @@ func copyTexturesFromAllTextures(of image: String, to target: String, newName: S
     
     return addImage(data: data!, targetDirectoryName: "PenguinTextures", imageName: newName)
 }
-
-// On drop -> Get UUID()
-// get index of UUID -> get url -> retrieve ui image from path -> convert to data -> write in new directory

@@ -10,9 +10,7 @@ import CoreImage
 import UIKit
 import os.log
 
-/*#-code-walkthrough(cam.intro)*/
 class Camera: NSObject {
-/*#-code-walkthrough(cam.intro)*/
     private let captureSession = AVCaptureSession()
     private var isCaptureSessionConfigured = false
     private var deviceInput: AVCaptureDeviceInput?
@@ -36,16 +34,16 @@ class Camera: NSObject {
     
     private var captureDevices: [AVCaptureDevice] {
         var devices = [AVCaptureDevice]()
-        #if os(macOS) || (os(iOS) && targetEnvironment(macCatalyst))
+#if os(macOS) || (os(iOS) && targetEnvironment(macCatalyst))
         devices += allCaptureDevices
-        #else
+#else
         if let backDevice = backCaptureDevices.first {
             devices += [backDevice]
         }
         if let frontDevice = frontCaptureDevices.first {
             devices += [frontDevice]
         }
-        #endif
+#endif
         return devices
     }
     
@@ -76,16 +74,14 @@ class Camera: NSObject {
         guard let captureDevice = captureDevice else { return false }
         return backCaptureDevices.contains(captureDevice)
     }
-
+    
     private var addToPhotoStream: ((AVCapturePhoto) -> Void)?
     
     private var addToPreviewStream: ((CIImage) -> Void)?
     
     var isPreviewPaused = false
     
-    /*#-code-walkthrough(previewflow.previewStream)*/
     lazy var previewStream: AsyncStream<CIImage> = {
-    /*#-code-walkthrough(previewflow.previewStream)*/
         AsyncStream { continuation in
             addToPreviewStream = { ciImage in
                 if !self.isPreviewPaused {
@@ -102,7 +98,7 @@ class Camera: NSObject {
             }
         }
     }()
-        
+    
     override init() {
         super.init()
         initialize()
@@ -110,7 +106,7 @@ class Camera: NSObject {
     
     private func initialize() {
         sessionQueue = DispatchQueue(label: "session queue")
-                
+        
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         NotificationCenter.default.addObserver(self, selector: #selector(updateForDeviceOrientation), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
@@ -135,12 +131,12 @@ class Camera: NSObject {
         }
         
         let photoOutput = AVCapturePhotoOutput()
-                        
+        
         captureSession.sessionPreset = AVCaptureSession.Preset.photo
-
+        
         let videoOutput = AVCaptureVideoDataOutput()
         videoOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "VideoDataOutputQueue"))
-  
+        
         guard captureSession.canAddInput(deviceInput) else {
             logger.error("Unable to add device input to capture session.")
             return
@@ -210,7 +206,7 @@ class Camera: NSObject {
         
         captureSession.beginConfiguration()
         defer { captureSession.commitConfiguration() }
-
+        
         for input in captureSession.inputs {
             if let deviceInput = input as? AVCaptureDeviceInput {
                 captureSession.removeInput(deviceInput)
@@ -244,9 +240,7 @@ class Camera: NSObject {
         }
     }
     
-    /*#-code-walkthrough(previewflow.start)*/
     func start() async {
-    /*#-code-walkthrough(previewflow.start)*/
         let authorized = await checkAuthorization()
         guard authorized else {
             logger.error("Camera access was not authorized.")
@@ -295,7 +289,7 @@ class Camera: NSObject {
             }
         }
     }
-
+    
     private var deviceOrientation: UIDeviceOrientation {
         var orientation = UIDevice.current.orientation
         if orientation == UIDeviceOrientation.unknown {
@@ -319,17 +313,13 @@ class Camera: NSObject {
         }
     }
     
-    /*#-code-walkthrough(photoflow.takePhoto)*/
     func takePhoto() {
         guard let photoOutput = self.photoOutput else { return }
-        /*#-code-walkthrough(photoflow.takePhoto)*/
         
         sessionQueue.async {
-        
-            /*#-code-walkthrough(photoflow.photoSettings)*/
+            
             var photoSettings = AVCapturePhotoSettings()
-            /*#-code-walkthrough(photoflow.photoSettings)*/
-
+            
             if photoOutput.availablePhotoCodecTypes.contains(.hevc) {
                 photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
             }
@@ -343,32 +333,26 @@ class Camera: NSObject {
             
             if let photoOutputVideoConnection = photoOutput.connection(with: .video) {
                 if photoOutputVideoConnection.isVideoOrientationSupported,
-                    let videoOrientation = self.videoOrientationFor(self.deviceOrientation) {
+                   let videoOrientation = self.videoOrientationFor(self.deviceOrientation) {
                     photoOutputVideoConnection.videoOrientation = videoOrientation
                 }
             }
             
-            /*#-code-walkthrough(photoflow.capturePhoto)*/
             photoOutput.capturePhoto(with: photoSettings, delegate: self)
-            /*#-code-walkthrough(photoflow.capturePhoto)*/
         }
     }
 }
 
 extension Camera: AVCapturePhotoCaptureDelegate {
     
-    /*#-code-walkthrough(photoflow.didFinishProcessingPhoto)*/
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        /*#-code-walkthrough(photoflow.didFinishProcessingPhoto)*/
         
         if let error = error {
             logger.error("Error capturing photo: \(error.localizedDescription)")
             return
         }
         
-        /*#-code-walkthrough(photoflow.addToPhotoStream)*/
         addToPhotoStream?(photo)
-        /*#-code-walkthrough(photoflow.addToPhotoStream)*/
     }
 }
 
@@ -381,13 +365,13 @@ extension Camera: AVCaptureVideoDataOutputSampleBufferDelegate {
            let videoOrientation = videoOrientationFor(deviceOrientation) {
             connection.videoOrientation = videoOrientation
         }
-
+        
         addToPreviewStream?(CIImage(cvPixelBuffer: pixelBuffer))
     }
 }
 
 fileprivate extension UIScreen {
-
+    
     var orientation: UIDeviceOrientation {
         let point = coordinateSpace.convert(CGPoint.zero, to: fixedCoordinateSpace)
         if point == CGPoint.zero {
