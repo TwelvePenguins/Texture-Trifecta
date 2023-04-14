@@ -10,7 +10,7 @@ import AppleProductTypes
 let package = Package(
     name: "SSC 2023",
     platforms: [
-        .iOS("15.2")
+        .iOS("16.0")
     ],
     products: [
         .iOSApplication(
@@ -27,10 +27,12 @@ let package = Package(
                 .phone
             ],
             supportedInterfaceOrientations: [
-                .portrait,
                 .landscapeRight,
-                .landscapeLeft,
-                .portraitUpsideDown(.when(deviceFamilies: [.pad]))
+                .landscapeLeft
+            ],
+            capabilities: [
+                .camera(purposeString: "Allow access to capture textures"),
+                .photoLibrary(purposeString: "Allow access to save textures")
             ]
         )
     ],
