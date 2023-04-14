@@ -22,6 +22,8 @@ struct DesignEditView: View {
     ]
     @State var allTextures: [UIImage] = []
     
+    @State var selectedSection: String = ""
+    
     @State var dropImage: [Image] = [Image("PenguinTorso"),
                                      Image("PenguinBelly"),
                                      Image("PenguinEye"),
@@ -44,7 +46,7 @@ struct DesignEditView: View {
                             NavigationLink {
                                 CameraView()
                                     .onDisappear() {
-                                            allTextures = retrieveImages(in: "AllTextures")
+                                        allTextures = retrieveImages(in: "AllTextures")
                                     }
                             } label: {
                                 ZStack(alignment: .center) {
@@ -69,8 +71,8 @@ struct DesignEditView: View {
                                             .resizable()
                                             .scaledToFit()
                                             .padding(10)
-                                            .draggable(Image(uiImage: texture)
-)
+                                        //                                            .draggable(Image(uiImage: texture)
+                                        //)
                                     }
                                 }
                             }
@@ -82,32 +84,42 @@ struct DesignEditView: View {
                     Divider()
                     ZStack {
                         ForEach($penguinSections) { $section in
-                            dropImage[penguinSections.firstIndex(of: section)!]
-                                .contentShape(AnyShape(section.shape))
-                                .scaledToFit()
-                                .frame(maxWidth: geo.size.width * 0.6)
-                                .mask {
-                                    Image(section.name)
-                                        .scaledToFit()
-                                        .frame(maxWidth: geo.size.width * 0.6)
+                            ZStack {
+                                dropImage[penguinSections.firstIndex(of: section)!]
+                                if selectedSection == section.name {
+                                    Image("SelectedMask")
                                 }
-                                .dropDestination(for: Image.self) { items, location in
-                                    dropImage[penguinSections.firstIndex(of: section)!] = items.first ?? Image(section.name)
-                                    logger.debug("Drop photo")
-                                    return true
-                                }
+                            }
+                            .contentShape(AnyShape(section.shape))
+                            .scaledToFit()
+                            .frame(maxWidth: geo.size.width * 0.6)
+                            .mask {
+                                Image(section.name)
+                                    .scaledToFit()
+                                    .frame(maxWidth: geo.size.width * 0.6)
+                            }
+                            .onTapGesture {
+                                selectedSection = section.name
+                                print(selectedSection)
+                            }
                         }
+                        
+                        //                                                            .dropDestination(for: Image.self) { items, location in
+                        //                                                                dropImage[penguinSections.firstIndex(of: section)!] = items.first ?? Image(section.name)
+                        //                                                                logger.debug("Drop photo")
+                        //                                                                return true
+                        //                                                            }
                     }
                 }
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            
-                        } label: {
-                            HStack {
-                                Text("Save")
-                                    .foregroundColor(.accentColor)
-                            }
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        
+                    } label: {
+                        HStack {
+                            Text("Save")
+                                .foregroundColor(.accentColor)
                         }
                     }
                 }
