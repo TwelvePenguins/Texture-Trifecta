@@ -62,12 +62,12 @@ struct DesignEditView: View {
                             }
                             .padding(.bottom, 15)
                             ScrollView(.vertical) {
-                                LazyVGrid(columns: [GridItem(.flexible(maximum: 250)), GridItem(.flexible(maximum: 250))], alignment: .center) {
+                                LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))], alignment: .center, spacing: 10) {
                                     //Grid of textures
                                     ForEach(allTextures, id: \.self) { texture in
                                         Image(uiImage: texture)
                                             .resizable()
-                                            .scaledToFill()
+                                            .scaledToFit()
                                             .padding(10)
                                             .draggable(Image(uiImage: texture)
 )
@@ -78,15 +78,11 @@ struct DesignEditView: View {
                         }
                     }
                     .scaledToFit()
+                    .padding(.trailing, 10)
                     Divider()
                     ZStack {
                         ForEach($penguinSections) { $section in
                             dropImage[penguinSections.firstIndex(of: section)!]
-                                .dropDestination(for: Image.self) { items, location in
-                                    dropImage[penguinSections.firstIndex(of: section)!] = items.first ?? Image(section.name)
-                                    logger.debug("Drop photo")
-                                    return true
-                                }
                                 .contentShape(AnyShape(section.shape))
                                 .scaledToFit()
                                 .frame(maxWidth: geo.size.width * 0.6)
@@ -94,6 +90,11 @@ struct DesignEditView: View {
                                     Image(section.name)
                                         .scaledToFit()
                                         .frame(maxWidth: geo.size.width * 0.6)
+                                }
+                                .dropDestination(for: Image.self) { items, location in
+                                    dropImage[penguinSections.firstIndex(of: section)!] = items.first ?? Image(section.name)
+                                    logger.debug("Drop photo")
+                                    return true
                                 }
                         }
                     }

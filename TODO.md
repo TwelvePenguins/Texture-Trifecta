@@ -4,6 +4,7 @@
 - Show folder contents in gallery
 - final screen
 - guider
+- Delete photos 
 
 ## Good to have: 
 - Fix navigation bar in CamerView and PhotoItemView
