@@ -33,7 +33,7 @@ struct DesignEditView: View {
                                      Image("PenguinBeak"),
     ]
     
-    var texturedSections: [TexturedSection] = []
+    @State var texturedSections: [TexturedSection] = []
     
     @State var textureSelected: UIImage = UIImage()
     
@@ -83,8 +83,12 @@ struct DesignEditView: View {
                                                     if selectedSection != "" {
                                                         if textureSelected == texture {
                                                             textureSelected = UIImage()
+                                                            let elementToRemove = texturedSections.first(where: {$0.sectionName == selectedSection})
+                                                            texturedSections.removeAll(where: {$0 == elementToRemove})
                                                         } else {
                                                             textureSelected = texture
+                                                            texturedSections.append(TexturedSection(sectionName: selectedSection, texture: textureSelected))
+                                                            print(texturedSections)
                                                         }
                                                     }
                                                 }
@@ -97,8 +101,12 @@ struct DesignEditView: View {
                                                     if selectedSection != "" {
                                                         if textureSelected == texture {
                                                             textureSelected = UIImage()
+                                                            let elementToRemove = texturedSections.first(where: {$0.sectionName == selectedSection})
+                                                            texturedSections.removeAll(where: {$0 == elementToRemove})
                                                         } else {
                                                             textureSelected = texture
+                                                            texturedSections.append(TexturedSection(sectionName: selectedSection, texture: textureSelected))
+                                                            print(texturedSections)
                                                         }
                                                     }
                                                 }

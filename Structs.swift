@@ -29,3 +29,12 @@ struct TexturedSection: Identifiable {
     var sectionName: String
     var texture: UIImage
 }
+
+extension TexturedSection: Equatable {
+    static func == (lhs: TexturedSection, rhs: TexturedSection) -> Bool {
+        return
+            lhs.id == rhs.id &&
+            lhs.sectionName == rhs.sectionName &&
+            lhs.texture == rhs.texture
+    }
+}
