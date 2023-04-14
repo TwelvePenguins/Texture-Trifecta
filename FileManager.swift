@@ -88,7 +88,7 @@ func copyTexturesFromAllTextures(of image: String, to target: String, newName: S
     let originalFileString = getFilesURL(in: "AllTextures").map({ $0.path(percentEncoded: false) }).filter { $0.contains(image) }
     let data = UIImage(contentsOfFile: originalFileString[0])?.pngData()
     
-    return addImage(data: data!, targetDirectoryName: "PenguinTextures", imageName: newName)
+    return addImage(data: data!, targetDirectoryName: target, imageName: newName)
 }
 
 fileprivate let logger = Logger(subsystem: "com.apple.du.yuhan.SSC-2023", category: "FileManager")

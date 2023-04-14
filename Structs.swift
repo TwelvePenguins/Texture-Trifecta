@@ -23,3 +23,9 @@ struct Section: Identifiable, Hashable {
     }
 
 }
+
+struct TexturedSection: Identifiable {
+    var id = UUID()
+    var sectionName: String
+    var texture: UIImage
+}

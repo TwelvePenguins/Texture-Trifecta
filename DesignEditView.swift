@@ -33,6 +33,10 @@ struct DesignEditView: View {
                                      Image("PenguinBeak"),
     ]
     
+    var texturedSections: [TexturedSection] = []
+    
+    @State var textureSelected: UIImage = UIImage()
+    
     var body: some View {
         GeometryReader { geo in
             NavigationStack {
@@ -67,13 +71,42 @@ struct DesignEditView: View {
                                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))], alignment: .center, spacing: 10) {
                                     //Grid of textures
                                     ForEach(allTextures, id: \.self) { texture in
-                                        Image(uiImage: texture)
-                                            .resizable()
-                                            .scaledToFit()
-                                            .padding(10)
-                                        //                                            .draggable(Image(uiImage: texture)
-                                        //)
+                                        if selectedSection != "" && textureSelected == texture {
+                                            Image(uiImage: texture)
+                                                .resizable()
+                                                .scaledToFit()
+                                                .padding(10)
+                                                .overlay(alignment: .bottomTrailing) {
+                                                    Image(systemName: "checkmark.circle.fill")
+                                                }
+                                                .onTapGesture {
+                                                    if selectedSection != "" {
+                                                        if textureSelected == texture {
+                                                            textureSelected = UIImage()
+                                                        } else {
+                                                            textureSelected = texture
+                                                        }
+                                                    }
+                                                }
+                                        } else {
+                                            Image(uiImage: texture)
+                                                .resizable()
+                                                .scaledToFit()
+                                                .padding(10)
+                                                .onTapGesture {
+                                                    if selectedSection != "" {
+                                                        if textureSelected == texture {
+                                                            textureSelected = UIImage()
+                                                        } else {
+                                                            textureSelected = texture
+                                                        }
+                                                    }
+                                                }
+                                        }
                                     }
+
+                                    //                                            .draggable(Image(uiImage: texture)
+                                    //)
                                 }
                             }
                             .frame(width: geo.size.width * 0.3, height: geo.size.height * 0.7)
@@ -99,8 +132,11 @@ struct DesignEditView: View {
                                     .frame(maxWidth: geo.size.width * 0.6)
                             }
                             .onTapGesture {
-                                selectedSection = section.name
-                                print(selectedSection)
+                                if selectedSection == section.name {
+                                    selectedSection = ""
+                                } else {
+                                    selectedSection = section.name
+                                }
                             }
                         }
                         
@@ -132,3 +168,7 @@ struct DesignEditView: View {
 }
 
 fileprivate let logger = Logger(subsystem: "com.apple.du.yuhan.SSC-2023", category: "DesignEditView")
+
+func getIndexOfSection(name: String) {
+    
+}
