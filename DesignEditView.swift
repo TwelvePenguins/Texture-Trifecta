@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import os.log
 
 struct DesignEditView: View {
     
@@ -19,7 +20,7 @@ struct DesignEditView: View {
         Section(name: "PenguinRFoot", shape: PenguinRFoot()),
         Section(name: "PenguinBeak", shape: PenguinBeak())
     ]
-    @State var allTextures: [UIImage] = [] //Placeholders - Captured textures go here.
+    @State var allTextures: [UIImage] = []
     
     @State var dropImage: [Image] = [Image("PenguinTorso"),
                                      Image("PenguinBelly"),
@@ -42,6 +43,9 @@ struct DesignEditView: View {
                         VStack (alignment: .center) {
                             NavigationLink {
                                 CameraView()
+                                    .onDisappear() {
+                                            allTextures = retrieveImages(in: "AllTextures")
+                                    }
                             } label: {
                                 ZStack(alignment: .center) {
                                     RoundedRectangle(cornerRadius: 5)
@@ -58,7 +62,7 @@ struct DesignEditView: View {
                             }
                             .padding(.bottom, 15)
                             ScrollView(.vertical) {
-                                LazyVGrid(columns: [GridItem(.flexible(maximum: 130)), GridItem(.flexible(maximum: 130))], alignment: .center) {
+                                LazyVGrid(columns: [GridItem(.flexible(maximum: 250)), GridItem(.flexible(maximum: 250))], alignment: .center) {
                                     //Grid of textures
                                     ForEach(allTextures, id: \.self) { texture in
                                         Image(uiImage: texture)
@@ -80,6 +84,7 @@ struct DesignEditView: View {
                             dropImage[penguinSections.firstIndex(of: section)!]
                                 .dropDestination(for: Image.self) { items, location in
                                     dropImage[penguinSections.firstIndex(of: section)!] = items.first ?? Image(section.name)
+                                    logger.debug("Drop photo")
                                     return true
                                 }
                                 .contentShape(AnyShape(section.shape))
@@ -113,3 +118,4 @@ struct DesignEditView: View {
     }
 }
 
+fileprivate let logger = Logger(subsystem: "com.apple.du.yuhan.SSC-2023", category: "DesignEditView")

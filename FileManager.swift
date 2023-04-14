@@ -25,7 +25,7 @@ func createDirectory(name: String, path: URL) {
     }
 }
 
-func findDirectoryURL(target: String) -> URL {
+func getDirectoryURL(target: String) -> URL {
     do {
         let URLs = try fm.contentsOfDirectory(at: getDocumentDirectory(), includingPropertiesForKeys: [.nameKey, .pathKey])
         let strings = URLs.map({$0.path()})
@@ -47,7 +47,7 @@ func addImage(data: Data, targetDirectoryName: String, imageName: String?) -> Bo
         unwrappedName = UUID().uuidString
     }
     
-    let url = findDirectoryURL(target: targetDirectoryName).appendingPathComponent("\(unwrappedName).png")
+    let url = getDirectoryURL(target: targetDirectoryName).appendingPathComponent("\(unwrappedName).png")
     
     do {
         try data.write(to: url)
@@ -58,9 +58,9 @@ func addImage(data: Data, targetDirectoryName: String, imageName: String?) -> Bo
     }
 }
 
-func findFilesURL(in directory: String) -> [URL] {
+func getFilesURL(in directory: String) -> [URL] {
     do {
-        let URLs = try fm.contentsOfDirectory(at: findDirectoryURL(target: directory), includingPropertiesForKeys: [.nameKey, .pathKey])
+        let URLs = try fm.contentsOfDirectory(at: getDirectoryURL(target: directory), includingPropertiesForKeys: [.nameKey, .pathKey])
         return URLs
     } catch {
         print(error.localizedDescription)
@@ -69,11 +69,15 @@ func findFilesURL(in directory: String) -> [URL] {
 }
 
 func retrieveImages(in directory: String) -> [UIImage] {
-    let filePaths = findFilesURL(in: directory).map { $0.path(percentEncoded: false) }
+    let filePaths = getFilesURL(in: directory).map { $0.path(percentEncoded: false) }.filter({ $0.contains(".png") })
     var imageArray: [UIImage] = []
     
-    for path in filePaths {
-        imageArray.append(UIImage(contentsOfFile: path)!)
+    if filePaths == [] {
+        return []
+    } else {
+        for path in filePaths {
+            imageArray.append(UIImage(contentsOfFile: path) ?? UIImage(systemName: "camera.metering.unknown")!)
+        }
     }
     
     return imageArray
@@ -81,8 +85,10 @@ func retrieveImages(in directory: String) -> [UIImage] {
 
 func copyTexturesFromAllTextures(of image: String, to target: String, newName: String) -> Bool {
     //Never use this to add textures - You can't name it to be a UUID().
-    let originalFileString = findFilesURL(in: "AllTextures").map({ $0.path(percentEncoded: false) }).filter { $0.contains(image) }
+    let originalFileString = getFilesURL(in: "AllTextures").map({ $0.path(percentEncoded: false) }).filter { $0.contains(image) }
     let data = UIImage(contentsOfFile: originalFileString[0])?.pngData()
     
     return addImage(data: data!, targetDirectoryName: "PenguinTextures", imageName: newName)
 }
+
+fileprivate let logger = Logger(subsystem: "com.apple.du.yuhan.SSC-2023", category: "FileManager")
