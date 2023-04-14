@@ -93,6 +93,18 @@ struct DesignEditView: View {
                         }
                     }
                 }
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            
+                        } label: {
+                            HStack {
+                                Text("Save")
+                                    .foregroundColor(.accentColor)
+                            }
+                        }
+                    }
+                }
             }
         }
         .onAppear {

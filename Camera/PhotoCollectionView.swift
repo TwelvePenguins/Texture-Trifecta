@@ -2,7 +2,7 @@ import SwiftUI
 import os.log
 
 struct PhotoCollectionView: View {
-    @ObservedObject var photoCollection : PhotoCollection
+    @ObservedObject var photoCollection: PhotoCollection
     
     @Environment(\.displayScale) private var displayScale
         
@@ -40,9 +40,7 @@ struct PhotoCollectionView: View {
     
     private func photoItemView(asset: PhotoAsset) -> some View {
         PhotoItemView(asset: asset, cache: photoCollection.cache, imageSize: imageSize)
-            /*#-code-walkthrough(pcv.photoItemViewFrame)*/
             .frame(width: Self.itemSize.width, height: Self.itemSize.height)
-            /*#-code-walkthrough(pcv.photoItemViewFrame)*/
             .clipped()
             .cornerRadius(Self.itemCornerRadius)
             .overlay(alignment: .bottomLeading) {

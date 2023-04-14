@@ -1,7 +1,7 @@
 #  TODO
 
 ## To implement: 
-- Show folder contents in gallery and textures selection panel
+- Show folder contents in gallery
 - final screen
 - guider
 

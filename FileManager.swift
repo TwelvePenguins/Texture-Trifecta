@@ -37,11 +37,18 @@ func findDirectoryURL(target: String) -> URL {
     }
 }
 
-func addImage(data: Data, targetDirectoryName: String) -> Bool {
+func addImage(data: Data, targetDirectoryName: String, imageName: String?) -> Bool {
+    //To add image with a name of UUID, enter nil
     
-    let imageName = UUID()
-    let url = findDirectoryURL(target: targetDirectoryName).appendingPathComponent("\(imageName).png")
-
+    var unwrappedName = ""
+    if let imageName = imageName {
+        unwrappedName = imageName
+    } else {
+        unwrappedName = UUID().uuidString
+    }
+    
+    let url = findDirectoryURL(target: targetDirectoryName).appendingPathComponent("\(unwrappedName).png")
+    
     do {
         try data.write(to: url)
         return true
@@ -71,3 +78,14 @@ func retrieveImages(in directory: String) -> [UIImage] {
     
     return imageArray
 }
+
+func copyTexturesFromAllTextures(of image: String, to target: String, newName: String) -> Bool {
+    //Never use this to add textures - You can't name it to be a UUID().
+    let originalFileString = findFilesURL(in: "AllTextures").map({ $0.path(percentEncoded: false) }).filter { $0.contains(image) }
+    let data = UIImage(contentsOfFile: originalFileString[0])?.pngData()
+    
+    return addImage(data: data!, targetDirectoryName: "PenguinTextures", imageName: newName)
+}
+
+// On drop -> Get UUID()
+// get index of UUID -> get url -> retrieve ui image from path -> convert to data -> write in new directory

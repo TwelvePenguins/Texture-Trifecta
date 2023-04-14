@@ -8,9 +8,7 @@
 import Photos
 import os.log
 
-/*#-code-walkthrough(pa.intro)*/
 struct PhotoAsset: Identifiable {
-    /*#-code-walkthrough(pa.intro)*/
     var id: String { identifier }
     var identifier: String = UUID().uuidString
     var index: Int?
