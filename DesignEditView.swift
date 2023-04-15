@@ -133,6 +133,7 @@ struct DesignEditView: View {
                                     .frame(maxWidth: geo.size.width * 0.6)
                             }
                             .onTapGesture {
+                                print(part.name)
                                 if partSelected == part.name {
                                     partSelected = ""
                                     textureSelected = UIImage()
