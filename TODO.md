@@ -13,7 +13,6 @@
 https://github.com/rorodriguez116/SwiftCamera
 
 ## Bug:
-- After filling torso, drag and drop just dies. 
 
 //
 //  DesignsManager.swift
