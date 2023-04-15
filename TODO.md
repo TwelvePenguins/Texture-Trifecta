@@ -13,7 +13,7 @@
 https://github.com/rorodriguez116/SwiftCamera
 
 ## Bug:
-
+- Orca does not render
 //
 //  DesignsManager.swift
 //  SSC 2023

@@ -8,17 +8,16 @@
 import Foundation
 import SwiftUI
 
-struct Section: Identifiable, Hashable {
+struct Part: Identifiable, Hashable {
     var id = UUID()
     var name: String
     var shape: any Shape
-    var isTextured: Bool = false
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
     
-    static func == (lhs: Section, rhs: Section) -> Bool {
+    static func == (lhs: Part, rhs: Part) -> Bool {
         return lhs.id == rhs.id && lhs.id == rhs.id
     }
 
@@ -37,4 +36,15 @@ extension TexturedSection: Equatable {
             lhs.sectionName == rhs.sectionName &&
             lhs.texture == rhs.texture
     }
+}
+
+struct Collection: Identifiable {
+    var id = UUID()
+    var name: String
+    var objects: [Object]
+}
+
+struct Object: Hashable {
+    var name: String
+    var parts: [Part]
 }

@@ -11,18 +11,11 @@ import os.log
 
 struct DesignEditView: View {
     
-    @State var penguinSections = [
-        Section(name: "PenguinTorso", shape: PenguinTorso()),
-        Section(name: "PenguinBelly", shape: PenguinBelly()),
-        Section(name: "PenguinEye", shape: PenguinEye()),
-        Section(name: "PenguinFlipper", shape: PenguinFlipper()),
-        Section(name: "PenguinLFoot", shape: PenguinLFoot()),
-        Section(name: "PenguinRFoot", shape: PenguinRFoot()),
-        Section(name: "PenguinBeak", shape: PenguinBeak())
-    ]
+    @Binding var parts: Object
+    
     @State var allTextures: [UIImage] = []
     
-    @State var sectionSelected: String = ""
+    @State var partSelected: String = ""
     
     @State var texturedSections: [TexturedSection] = []
     
@@ -62,7 +55,7 @@ struct DesignEditView: View {
                                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))], alignment: .center, spacing: 10) {
                                     //Grid of textures
                                     ForEach(allTextures, id: \.self) { texture in
-                                        if sectionSelected != "" && textureSelected == texture {
+                                        if partSelected != "" && textureSelected == texture {
                                             Image(uiImage: texture)
                                                 .resizable()
                                                 .scaledToFit()
@@ -71,18 +64,18 @@ struct DesignEditView: View {
                                                     Image(systemName: "checkmark.circle.fill")
                                                 }
                                                 .onTapGesture {
-                                                    if sectionSelected != "" {
+                                                    if partSelected != "" {
                                                         if textureSelected == texture {
                                                             textureSelected = UIImage()
-                                                            let elementToRemove = texturedSections.first(where: {$0.sectionName == sectionSelected})
+                                                            let elementToRemove = texturedSections.first(where: {$0.sectionName == partSelected})
                                                             texturedSections.removeAll(where: {$0 == elementToRemove})
-                                                        } else if texturedSections.filter({$0.sectionName == sectionSelected}) != [] {
+                                                        } else if texturedSections.filter({$0.sectionName == partSelected}) != [] {
                                                             textureSelected = texture
-                                                            texturedSections[texturedSections.firstIndex(where: {$0.sectionName == sectionSelected})!].texture = textureSelected
+                                                            texturedSections[texturedSections.firstIndex(where: {$0.sectionName == partSelected})!].texture = textureSelected
                                                             print(texturedSections)
                                                         } else {
                                                             textureSelected = texture
-                                                            texturedSections.append(TexturedSection(sectionName: sectionSelected, texture: textureSelected))
+                                                            texturedSections.append(TexturedSection(sectionName: partSelected, texture: textureSelected))
                                                             print(texturedSections)
                                                         }
                                                     }
@@ -93,16 +86,16 @@ struct DesignEditView: View {
                                                 .scaledToFit()
                                                 .padding(10)
                                                 .onTapGesture {
-                                                    if sectionSelected != "" {
+                                                    if partSelected != "" {
                                                         if textureSelected == texture {
                                                             textureSelected = UIImage()
-                                                            let elementToRemove = texturedSections.first(where: {$0.sectionName == sectionSelected})
+                                                            let elementToRemove = texturedSections.first(where: {$0.sectionName == partSelected})
                                                             texturedSections.removeAll(where: {$0 == elementToRemove})
-                                                        } else if texturedSections.filter({$0.sectionName == sectionSelected}) != [] {
+                                                        } else if texturedSections.filter({$0.sectionName == partSelected}) != [] {
                                                             textureSelected = texture
-                                                            texturedSections[texturedSections.firstIndex(where: {$0.sectionName == sectionSelected})!].texture = textureSelected                                                      } else {
+                                                            texturedSections[texturedSections.firstIndex(where: {$0.sectionName == partSelected})!].texture = textureSelected                                                      } else {
                                                                 textureSelected = texture
-                                                                texturedSections.append(TexturedSection(sectionName: sectionSelected, texture: textureSelected))
+                                                                texturedSections.append(TexturedSection(sectionName: partSelected, texture: textureSelected))
                                                                 print(texturedSections)
                                                             }
                                                     }
@@ -119,38 +112,38 @@ struct DesignEditView: View {
                     .padding(.trailing, 10)
                     Divider()
                     ZStack {
-                        ForEach(penguinSections) { section in
+                        ForEach(parts.parts) { part in
                             ZStack {
-                                Image(section.name)
-                                if texturedSections.filter({$0.sectionName == section.name}) != [] {
-                                    Image(uiImage: texturedSections[texturedSections.firstIndex(where: {$0.sectionName == section.name})!].texture)
+                                Image(part.name)
+                                if texturedSections.filter({$0.sectionName == part.name}) != [] {
+                                    Image(uiImage: texturedSections[texturedSections.firstIndex(where: {$0.sectionName == part.name})!].texture)
                                         .resizable()
                                         .scaledToFill()
                                 }
-                                if sectionSelected == section.name {
+                                if partSelected == part.name {
                                     Image("SelectedMask")
                                 }
                             }
-                            .contentShape(AnyShape(section.shape))
+                            .contentShape(AnyShape(part.shape))
                             .scaledToFit()
                             .frame(maxWidth: geo.size.width * 0.6)
                             .mask {
-                                Image(section.name)
+                                Image(part.name)
                                     .scaledToFit()
                                     .frame(maxWidth: geo.size.width * 0.6)
                             }
                             .onTapGesture {
-                                if sectionSelected == section.name {
-                                    sectionSelected = ""
+                                if partSelected == part.name {
+                                    partSelected = ""
                                     textureSelected = UIImage()
                                 } else {
                                     textureSelected = UIImage()
-                                    sectionSelected = section.name
+                                    partSelected = part.name
                                 }
-                                if texturedSections.filter({$0.sectionName == sectionSelected}) != [] {
-                                    sectionSelected = section.name
-                                    print(texturedSections.filter({$0.sectionName == sectionSelected}))
-                                    textureSelected = texturedSections[texturedSections.firstIndex(where: {$0.sectionName == sectionSelected})!].texture
+                                if texturedSections.filter({$0.sectionName == partSelected}) != [] {
+                                    partSelected = part.name
+                                    print(texturedSections.filter({$0.sectionName == partSelected}))
+                                    textureSelected = texturedSections[texturedSections.firstIndex(where: {$0.sectionName == partSelected})!].texture
                                 }
                             }
                         }
