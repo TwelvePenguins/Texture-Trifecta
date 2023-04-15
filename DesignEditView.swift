@@ -157,15 +157,18 @@ struct DesignEditView: View {
                         .frame(maxWidth: geo.size.width * 0.6)
                     }
                 }
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        
-                    } label: {
-                        HStack {
-                            Text("Save")
-                                .foregroundColor(.accentColor)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            for texturedSection in texturedSections {
+                                print(addImage(data: texturedSection.texture.pngData()!, targetDirectoryName: "PenguinTextures", imageName: texturedSection.sectionName))
+                            }
+                        } label: {
+                            HStack {
+                                Image(systemName: "square.and.arrow.down")
+                                Text("Save")
+                                    .foregroundColor(.accentColor)
+                            }
                         }
                     }
                 }
