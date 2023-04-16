@@ -122,6 +122,8 @@ struct DesignEditView: View {
                                 }
                                 if partSelected == part.name {
                                     Image("SelectedMask")
+                                        .resizable()
+                                        .scaledToFill()
                                 }
                             }
                             .contentShape(AnyShape(part.shape))
@@ -175,7 +177,3 @@ struct DesignEditView: View {
 }
 
 fileprivate let logger = Logger(subsystem: "com.apple.du.yuhan.SSC-2023", category: "DesignEditView")
-
-func getIndexOfSection(name: String) {
-    
-}
