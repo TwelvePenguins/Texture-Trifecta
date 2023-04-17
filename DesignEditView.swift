@@ -126,7 +126,7 @@ struct DesignEditView: View {
                                         .scaledToFill()
                                 }
                             }
-                            .contentShape(AnyShape(part.shape))
+                            .contentShape(.interaction, AnyShape(part.shape))
                             .scaledToFit()
                             .frame(maxWidth: geo.size.width * 0.6)
                             .mask {
