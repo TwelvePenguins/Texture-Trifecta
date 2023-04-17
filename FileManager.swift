@@ -26,6 +26,7 @@ func createDirectory(name: String, path: URL) {
 }
 
 func getDirectoryURL(target: String) -> URL {
+    //Target should be as specific as possible! Full file name. 
     do {
         let URLs = try fm.contentsOfDirectory(at: getDocumentDirectory(), includingPropertiesForKeys: [.nameKey, .pathKey])
         let strings = URLs.map({$0.path()})
@@ -38,7 +39,7 @@ func getDirectoryURL(target: String) -> URL {
 }
 
 func addImage(data: Data, targetDirectoryName: String, imageName: String?) -> Bool {
-    //To add image with a name of UUID, enter nil
+    //To add image with a name of UUID, enter nil for imageName
     
     var unwrappedName = ""
     if let imageName = imageName {
@@ -68,8 +69,10 @@ func getFilesURL(in directory: String) -> [URL] {
     }
 }
 
-func retrieveImages(in directory: String) -> [UIImage] {
-    let filePaths = getFilesURL(in: directory).map { $0.path(percentEncoded: false) }.filter({ $0.contains(".png") })
+func retrieveImages(in directory: String, imageName: String?) -> [UIImage] {
+    
+    
+    let filePaths = getFilesURL(in: directory).map { $0.path(percentEncoded: false) }.filter({ $0.contains(imageName ?? ".png") })
     var imageArray: [UIImage] = []
     
     if filePaths == [] {

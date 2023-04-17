@@ -49,7 +49,7 @@ struct CollectionView: View {
                                                 Image(object.name)
                                                     .resizable()
                                                     .scaledToFit()
-                                                    .border(.black)
+                                                    .mask(RoundedRectangle(cornerRadius: 10))
                                                 Text(object.name)
                                                     .font(.caption)
                                                     .bold()
@@ -79,6 +79,7 @@ struct CollectionView: View {
                         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 5))
                         .frame(maxWidth: geo.size.width * 0.7, maxHeight: geo.size.height * 0.3, alignment: .leading)
                     }
+                    Spacer()
                     Divider()
                     Spacer()
                     Text("More to come...")

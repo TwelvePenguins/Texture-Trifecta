@@ -11,14 +11,11 @@ import os.log
 
 struct DesignEditView: View {
     
+    @State var counter = 0
     @Binding var parts: Object
-    
     @State var allTextures: [UIImage] = []
-    
     @State var partSelected: String = ""
-    
     @State var texturedSections: [TexturedSection] = []
-    
     @State var textureSelected: UIImage = UIImage()
     
     var body: some View {
@@ -34,7 +31,7 @@ struct DesignEditView: View {
                             NavigationLink {
                                 CameraView()
                                     .onDisappear() {
-                                        allTextures = retrieveImages(in: "AllTextures")
+                                        allTextures = retrieveImages(in: "AllTextures", imageName: nil)
                                     }
                             } label: {
                                 ZStack(alignment: .center) {
@@ -135,7 +132,6 @@ struct DesignEditView: View {
                                     .frame(maxWidth: geo.size.width * 0.6)
                             }
                             .onTapGesture {
-                                print(part.name)
                                 if partSelected == part.name {
                                     partSelected = ""
                                     textureSelected = UIImage()
@@ -157,7 +153,7 @@ struct DesignEditView: View {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
                             for texturedSection in texturedSections {
-                                print(addImage(data: texturedSection.texture.pngData()!, targetDirectoryName: "PenguinTextures", imageName: texturedSection.sectionName))
+                                print(addImage(data: texturedSection.texture.pngData()!, targetDirectoryName: parts.name + "Textures", imageName: texturedSection.sectionName))
                             }
                         } label: {
                             HStack {
@@ -171,7 +167,15 @@ struct DesignEditView: View {
             }
         }
         .onAppear {
-            allTextures = retrieveImages(in: "AllTextures")
+            counter += 1
+            allTextures = retrieveImages(in: "AllTextures", imageName: nil)
+            if counter == 1 {
+                for part in parts.parts {
+                    if retrieveImages(in: parts.name + "Textures", imageName: part.name + ".png") != [] {
+                        texturedSections.append(TexturedSection(sectionName: part.name, texture: retrieveImages(in: parts.name + "Textures", imageName: part.name + ".png")[0]))
+                    }
+                }
+            }
         }
     }
 }
