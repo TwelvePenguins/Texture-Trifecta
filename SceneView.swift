@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct SceneView: View {
-        
+    
+    let timer = Timer.publish(every: 10, tolerance: 0.5, on: .main, in: .common).autoconnect()
+
     @Binding var collection: Collection
     
-    @State var status: String = "Activated"
+    @State var status: String = "Normal"
     
     @State var rotation = 0
     
@@ -22,6 +24,17 @@ struct SceneView: View {
                     .scaledToFit()
                     .ignoresSafeArea()
                     .frame(maxWidth: geo.size.width * 1)
+                    .onReceive(timer) { _ in
+                        withAnimation {
+                            status = "Activated"
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                            withAnimation {
+                                status = "Normal"
+                            }
+                        }
+                        print("Timer activated")
+                    }
 //                                ForEach(collection.objects[0].parts, id: \.self) { part in
 //                                    Image(part.name)
 //                                        .resizable()
@@ -70,7 +83,3 @@ func getOffset(of object: String) -> [Double] {
     }
 }
 
-//func fireTimer(timer: Timer) {
-//    status = "Activated"
-//    print("Timer fired")
-//}
