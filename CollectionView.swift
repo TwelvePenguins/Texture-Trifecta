@@ -10,7 +10,7 @@ import SwiftUI
 struct CollectionView: View {
     
     @State var collections: [Collection] = [
-        Collection(name: "Antics in Antartica", objects: [
+        Collection(name: "Antics in Antarctica", objects: [
             Object(name: "Penguin", parts: [
                 Part(name: "PenguinTorso", shape: PenguinTorso()),
                 Part(name: "PenguinBelly", shape: PenguinBelly()),
@@ -45,21 +45,27 @@ struct CollectionView: View {
                                         NavigationLink {
                                             DesignEditView(parts: $object)
                                         } label: {
-                                            VStack(spacing: 5) {
+                                            VStack(spacing: 0) {
                                                 Image(object.name)
                                                     .resizable()
                                                     .scaledToFit()
                                                     .mask(RoundedRectangle(cornerRadius: 10))
-                                                Text(object.name)
-                                                    .font(.caption)
-                                                    .bold()
+                                                ZStack {
+                                                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                                        .foregroundColor(.accentColor)
+                                                        .frame(width: 130, height: 30)
+                                                    Text(object.name)
+                                                        .font(.caption)
+                                                        .bold()
+                                                        .foregroundColor(.white)
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
                             NavigationLink {
-                                
+                                SceneView(collection: $collection)
                             } label: {
                                 ZStack(alignment: .center) {
                                     RoundedRectangle(cornerRadius: 5)

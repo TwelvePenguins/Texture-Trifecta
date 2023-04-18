@@ -146,7 +146,9 @@ struct DesignEditView: View {
                                 }
                             }
                         }
-                        .frame(maxWidth: geo.size.width * 0.6)
+//                        .rotationEffect(.degrees(180), anchor: .center)
+//                        .rotation3DEffect(.degrees(180), axis: (x: 1, y: 0, z: 0))
+                        .frame(minWidth: geo.size.width * 0.6, maxWidth: geo.size.width * 0.7)
                     }
                 }
                 .toolbar {
