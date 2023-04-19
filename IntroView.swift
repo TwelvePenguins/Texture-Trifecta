@@ -32,7 +32,7 @@ struct IntroView: View {
                                 .bold()
                             Text("Observe your surroundings. Take in the details and colours. Capture macro shots of the textures around you.")
                                 .multilineTextAlignment(.leading)
-                                .frame(maxWidth: 400)
+                                .frame(maxWidth: 385)
                                 .foregroundColor(.secondary)
                         }
                     }
@@ -48,7 +48,7 @@ struct IntroView: View {
                                 .bold()
                             Text("Think out of the box. Let your imagination take the lead. Fill in parts of animals with your collected textures.")
                                 .multilineTextAlignment(.leading)
-                                .frame(maxWidth: 425)
+                                .frame(maxWidth: 385)
                                 .foregroundColor(.secondary)
                         }
                     }
@@ -64,7 +64,7 @@ struct IntroView: View {
                                 .bold()
                             Text("Immerse yourself with the animals you gave life to. If you're patient, maybe they'll exhibit some curious behaviours...")
                                 .multilineTextAlignment(.leading)
-                                .frame(maxWidth: 400)
+                                .frame(maxWidth: 385)
                                 .foregroundColor(.secondary)
                         }
                     }
