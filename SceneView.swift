@@ -40,18 +40,7 @@ struct SceneView: View {
                                 penguinOffset = 0
                             }
                         }
-                        print("Timer activated")
                     }
-                //                                                                ForEach(collection.objects[0].parts, id: \.self) { part in
-                //                                                                    Image(part.name)
-                //                                                                        .resizable()
-                //                                                                        .scaledToFit()
-                //                                                                }
-                //                                                                    .frame(maxWidth: geo.size.width * 0.2)
-                //                                                                    .rotationEffect(.degrees(180), anchor: .center)
-                //                                                                    .rotation3DEffect(.degrees(180), axis: (x: 1, y: 0, z: 0))
-                //                                                                    .offset(x: geo.size.width * 0.2, y: geo.size.height * -0.2)
-                
                 
                 ForEach(collection.objects, id: \.self) { object in
                     Group {
