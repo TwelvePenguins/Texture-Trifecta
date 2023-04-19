@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import os.log
+import UIKit
 
 struct DesignEditView: View {
     
@@ -17,6 +18,7 @@ struct DesignEditView: View {
     @State var partSelected: String = ""
     @State var texturedSections: [TexturedSection] = []
     @State var textureSelected: UIImage = UIImage()
+    @GestureState var pinchScale: CGFloat = 1.0
     
     var body: some View {
         GeometryReader { geo in
@@ -88,44 +90,56 @@ struct DesignEditView: View {
                     .scaledToFit()
                     .padding(.trailing, 10)
                     Divider()
-                    ZStack {
-                        ForEach(parts.parts) { part in
-                            ZStack {
-                                Image(part.name)
-                                if texturedSections.filter({$0.sectionName == part.name}) != [] {
-                                    Image(uiImage: texturedSections[texturedSections.firstIndex(where: {$0.sectionName == part.name})!].texture)
-                                        .resizable()
-                                        .scaledToFill()
+                    ZoomableScrollView {
+                        ZStack {
+                            ForEach(parts.parts) { part in
+                                ZStack {
+                                    Image(part.name)
+                                    if texturedSections.filter({$0.sectionName == part.name}) != [] {
+                                        Image(uiImage: texturedSections.first(where: {$0.sectionName == part.name})!.texture)
+                                            .resizable()
+                                            .scaledToFill()
+                                    }
+                                    if partSelected == part.name {
+                                        Image("SelectedMask")
+                                            .resizable()
+                                            .scaledToFill()
+                                    }
                                 }
-                                if partSelected == part.name {
-                                    Image("SelectedMask")
-                                        .resizable()
-                                        .scaledToFill()
+                                .contentShape(.interaction, AnyShape(part.shape))
+                                .scaledToFit()
+                                .frame(maxWidth: geo.size.width * 0.6)
+                                //                            .scaleEffect(x: pinchScale, y: pinchScale)
+                                //                            .gesture(MagnificationGesture().updating($pinchScale) { (newValue, pinchScale, _) in
+                                //                                pinchScale = newValue
+                                //                            }
+                                //                            )
+                                .mask {
+                                    Image(part.name)
+                                        .scaledToFit()
+                                        .frame(maxWidth: geo.size.width * 0.6)
+                                    //                                    .scaleEffect(x: pinchScale, y: pinchScale)
+                                    //                                    .gesture(MagnificationGesture().updating($pinchScale) { (newValue, pinchScale, _) in
+                                    //                                        pinchScale = newValue
+                                    //                                    }
+                                    //                                    )
+                                }
+                                .onTapGesture {
+                                    if partSelected == part.name {
+                                        partSelected = ""
+                                        textureSelected = UIImage()
+                                    } else {
+                                        textureSelected = UIImage()
+                                        partSelected = part.name
+                                    }
+                                    if texturedSections.filter({$0.sectionName == partSelected}) != [] {
+                                        partSelected = part.name
+                                        textureSelected = texturedSections[texturedSections.firstIndex(where: {$0.sectionName == partSelected})!].texture
+                                    }
                                 }
                             }
-                            .contentShape(.interaction, AnyShape(part.shape))
-                            .scaledToFit()
-                            .frame(maxWidth: geo.size.width * 0.6)
-                            .mask {
-                                Image(part.name)
-                                    .scaledToFit()
-                                    .frame(maxWidth: geo.size.width * 0.6)
-                            }
-                            .onTapGesture {
-                                if partSelected == part.name {
-                                    partSelected = ""
-                                    textureSelected = UIImage()
-                                } else {
-                                    textureSelected = UIImage()
-                                    partSelected = part.name
-                                }
-                                if texturedSections.filter({$0.sectionName == partSelected}) != [] {
-                                    partSelected = part.name
-                                    textureSelected = texturedSections[texturedSections.firstIndex(where: {$0.sectionName == partSelected})!].texture
-                                }
-                            }
+                            .frame(minWidth: geo.size.width * 0.6, maxWidth: geo.size.width * 0.8)
                         }
-                        .frame(minWidth: geo.size.width * 0.6, maxWidth: geo.size.width * 0.8)
                     }
                 }
                 .toolbar {
