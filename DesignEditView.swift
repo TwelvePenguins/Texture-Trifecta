@@ -24,6 +24,7 @@ struct DesignEditView: View {
         "Can't seem to click on the sections you want? Pinch to zoom. ",
         "Always save before leaving this screen, including before opening the camera!"
     ]
+    @State var saveSuccessful = false
     
     var body: some View {
         GeometryReader { geo in
@@ -167,6 +168,13 @@ struct DesignEditView: View {
                             }
                         }
                     }
+                    .overlay(alignment: .center) {
+                        if saveSuccessful {
+                            Text("Successfully saved!")
+                                .padding(10)
+                                .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 5))
+                        }
+                    }
             }
             .navigationTitle(Text(parts.name))
             .toolbar {
@@ -174,6 +182,14 @@ struct DesignEditView: View {
                     Button {
                         for texturedSection in texturedSections {
                             print(addImage(data: texturedSection.texture.pngData()!, targetDirectoryName: parts.name + "Textures", imageName: texturedSection.sectionName))
+                        }
+                        withAnimation {
+                            saveSuccessful = true
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            withAnimation {
+                                saveSuccessful = false
+                            }
                         }
                     } label: {
                         HStack {

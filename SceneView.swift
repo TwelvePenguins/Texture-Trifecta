@@ -41,7 +41,6 @@ struct SceneView: View {
                             }
                         }
                     }
-                
                 ForEach(collection.objects, id: \.self) { object in
                     Group {
                         ForEach(object.parts) { part in
