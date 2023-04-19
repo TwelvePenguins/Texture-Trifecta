@@ -18,7 +18,12 @@ struct DesignEditView: View {
     @State var partSelected: String = ""
     @State var texturedSections: [TexturedSection] = []
     @State var textureSelected: UIImage = UIImage()
-    @GestureState var pinchScale: CGFloat = 1.0
+    @State var tipsIndex: Int = 0
+    var tips = [
+        "Tap on the target section, and then the desired texture to apply!",
+        "Can't seem to click on the sections you want? Pinch to zoom. ",
+        "Always save before leaving this screen, including before opening the camera!"
+    ]
     
     var body: some View {
         GeometryReader { geo in
@@ -86,66 +91,101 @@ struct DesignEditView: View {
                     .scaledToFit()
                     .padding(.trailing, 10)
                     Divider()
-                    ZoomableScrollView {
-                        ZStack {
-                            ForEach(parts.parts) { part in
-                                ZStack {
-                                    Image(part.name)
-                                    if texturedSections.filter({$0.sectionName == part.name}) != [] {
-                                        Image(uiImage: texturedSections.first(where: {$0.sectionName == part.name})!.texture)
-                                            .resizable()
-                                            .scaledToFill()
-                                    }
-                                    if partSelected == part.name {
-                                        Image("SelectedMask")
-                                            .resizable()
-                                            .scaledToFill()
+                    VStack {
+                        VStack {
+                            Text(tips[tipsIndex])
+                                .frame(maxWidth: geo.size.width * 0.55)
+                                .multilineTextAlignment(.center)
+                                .padding()
+                            HStack(spacing: 200) {
+                                if tipsIndex > 0 {
+                                    Button {
+                                        tipsIndex -= 1
+                                    } label: {
+                                        HStack {
+                                            Image(systemName: "chevron.left")
+                                            Text("Back")
+                                        }
+                                        .font(.caption)
+
                                     }
                                 }
-                                .contentShape(.interaction, AnyShape(part.shape))
-                                .scaledToFit()
-                                .frame(maxWidth: geo.size.width * 0.6)
-                                .mask {
-                                    Image(part.name)
-                                        .scaledToFit()
-                                        .frame(maxWidth: geo.size.width * 0.6)
-                                }
-                                .onTapGesture {
-                                    if partSelected == part.name {
-                                        partSelected = ""
-                                        textureSelected = UIImage()
-                                    } else {
-                                        textureSelected = UIImage()
-                                        partSelected = part.name
-                                    }
-                                    if texturedSections.filter({$0.sectionName == partSelected}) != [] {
-                                        partSelected = part.name
-                                        textureSelected = texturedSections[texturedSections.firstIndex(where: {$0.sectionName == partSelected})!].texture
+                                if tipsIndex < 2 {
+                                    Button {
+                                        tipsIndex += 1
+                                    } label: {
+                                        HStack {
+                                            Text("Next")
+                                            Image(systemName: "chevron.right")
+                                        }
+                                        .font(.caption)
                                     }
                                 }
                             }
-                            .frame(minWidth: geo.size.width * 0.6, maxWidth: geo.size.width * 0.8)
+                    }
+                    .padding(10)
+                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 5))
+                        ZoomableScrollView {
+                            ZStack {
+                                ForEach(parts.parts) { part in
+                                    ZStack {
+                                        Image(part.name)
+                                        if texturedSections.filter({$0.sectionName == part.name}) != [] {
+                                            Image(uiImage: texturedSections.first(where: {$0.sectionName == part.name})!.texture)
+                                                .resizable()
+                                                .scaledToFill()
+                                        }
+                                        if partSelected == part.name {
+                                            Image("SelectedMask")
+                                                .resizable()
+                                                .scaledToFill()
+                                        }
+                                    }
+                                    .contentShape(.interaction, AnyShape(part.shape))
+                                    .scaledToFit()
+                                    .frame(maxWidth: geo.size.width * 0.6)
+                                    .mask {
+                                        Image(part.name)
+                                            .scaledToFit()
+                                            .frame(maxWidth: geo.size.width * 0.6)
+                                    }
+                                    .onTapGesture {
+                                        if partSelected == part.name {
+                                            partSelected = ""
+                                            textureSelected = UIImage()
+                                        } else {
+                                            textureSelected = UIImage()
+                                            partSelected = part.name
+                                        }
+                                        if texturedSections.filter({$0.sectionName == partSelected}) != [] {
+                                            partSelected = part.name
+                                            textureSelected = texturedSections[texturedSections.firstIndex(where: {$0.sectionName == partSelected})!].texture
+                                        }
+                                    }
+                                }
+                                .frame(minWidth: geo.size.width * 0.6, maxWidth: geo.size.width * 0.8)
+                            }
                         }
                     }
-                }
-                .navigationTitle(Text(parts.name))
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            for texturedSection in texturedSections {
-                                print(addImage(data: texturedSection.texture.pngData()!, targetDirectoryName: parts.name + "Textures", imageName: texturedSection.sectionName))
-                            }
-                        } label: {
-                            HStack {
-                                Image(systemName: "square.and.arrow.down")
-                                Text("Save")
-                                    .foregroundColor(.accentColor)
-                            }
+            }
+            .navigationTitle(Text(parts.name))
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        for texturedSection in texturedSections {
+                            print(addImage(data: texturedSection.texture.pngData()!, targetDirectoryName: parts.name + "Textures", imageName: texturedSection.sectionName))
+                        }
+                    } label: {
+                        HStack {
+                            Image(systemName: "square.and.arrow.down")
+                            Text("Save")
+                                .foregroundColor(.accentColor)
                         }
                     }
                 }
             }
         }
+    }
         .onAppear {
             counter += 1
             allTextures = retrieveImages(in: "AllTextures", imageName: nil)
@@ -157,7 +197,7 @@ struct DesignEditView: View {
                 }
             }
         }
-    }
+}
 }
 
 fileprivate let logger = Logger(subsystem: "com.apple.du.yuhan.SSC-2023", category: "DesignEditView")
