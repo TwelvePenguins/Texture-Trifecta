@@ -56,15 +56,7 @@ struct SceneView: View {
                 ForEach(collection.objects, id: \.self) { object in
                     Group {
                         ForEach(object.parts) { part in
-                            VStack(spacing: -5) {
-                                if object.name == "Penguin" {
-                                    Text(rotation == 180 ? "!!" : "??")
-                                        .font(.title)
-                                        .foregroundColor(.red)
-                                        .fontDesign(.rounded)
-                                        .rotationEffect(.degrees(30))
-                                }
-                                
+                            ZStack {
                                 if textures.filter({$0.sectionName == part.name}) != [] {
                                     Image(uiImage: textures.first(where: {$0.sectionName == part.name})!.texture)
                                         .resizable()
@@ -80,6 +72,14 @@ struct SceneView: View {
                                     Image(part.name)
                                         .resizable()
                                         .scaledToFit()
+                                }
+                                if object.name == "Penguin" {
+                                    Text(rotation == 180 ? "!!" : "??")
+                                        .font(.title)
+                                        .foregroundColor(.red)
+                                        .fontDesign(.rounded)
+                                        .rotationEffect(.degrees(30))
+                                        .offset(x: 0, y: geo.size.height * -0.15)
                                 }
                             }
                         }
@@ -122,7 +122,7 @@ func getOffset(of object: String) -> [Double] {
     if object == "Orca" {
         return [0.2, 0.02]
     } else if object == "Penguin" {
-        return [0.2, -0.22]
+        return [0.2, -0.2]
     } else {
         return [0, 0]
     }
