@@ -24,68 +24,64 @@ struct DesignEditView: View {
         GeometryReader { geo in
             NavigationStack {
                 HStack {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Textures")
-                            .font(.largeTitle)
-                            .bold()
-                            .padding(.leading, 40)
-                        VStack (alignment: .center) {
-                            NavigationLink {
-                                CameraView()
-                                    .onDisappear() {
-                                        allTextures = retrieveImages(in: "AllTextures", imageName: nil)
-                                    }
-                            } label: {
-                                ZStack(alignment: .center) {
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .foregroundColor(.accentColor)
-                                        .frame(width: 260, height: 100)
-                                    VStack {
-                                        Image(systemName: "plus")
-                                            .font(.system(size: 30, weight: .bold, design: .default))
-                                        Text("Add Texture")
-                                            .font(.headline)
-                                    }
-                                    .foregroundColor(.white)
+                    VStack (alignment: .center) {
+                        NavigationLink {
+                            CameraView()
+                                .onDisappear() {
+                                    allTextures = retrieveImages(in: "AllTextures", imageName: nil)
                                 }
-                            }
-                            .padding(.bottom, 15)
-                            ScrollView(.vertical) {
-                                LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))], alignment: .center, spacing: 10) {
-                                    //Grid of textures
-                                    ForEach(allTextures, id: \.self) { texture in
-                                        Image(uiImage: texture)
-                                            .resizable()
-                                            .scaledToFit()
-                                            .padding(10)
-                                            .overlay(alignment: .bottomTrailing) {
-                                                if partSelected != "" && textureSelected == texture {
-                                                    Image(systemName: "checkmark.circle.fill")
-                                                } else {
-                                                    Rectangle()
-                                                        .fill(.clear)
-                                                }
-                                            }
-                                            .onTapGesture {
-                                                if partSelected != "" {
-                                                    if textureSelected == texture {
-                                                        textureSelected = UIImage()
-                                                        let elementToRemove = texturedSections.first(where: {$0.sectionName == partSelected})
-                                                        texturedSections.removeAll(where: {$0 == elementToRemove})
-                                                    } else if texturedSections.filter({$0.sectionName == partSelected}) != [] {
-                                                        textureSelected = texture
-                                                        texturedSections[texturedSections.firstIndex(where: {$0.sectionName == partSelected})!].texture = textureSelected
-                                                    } else {
-                                                        textureSelected = texture
-                                                        texturedSections.append(TexturedSection(sectionName: partSelected, texture: textureSelected))
-                                                    }
-                                                }
-                                            }
-                                    }
+                        } label: {
+                            ZStack(alignment: .center) {
+                                RoundedRectangle(cornerRadius: 5)
+                                    .foregroundColor(.accentColor)
+                                    .frame(width: 295, height: 100)
+                                VStack {
+                                    Image(systemName: "plus")
+                                        .font(.system(size: 30, weight: .bold, design: .default))
+                                    Text("Add Texture")
+                                        .font(.headline)
                                 }
+                                .foregroundColor(.white)
                             }
-                            .frame(width: geo.size.width * 0.3, height: geo.size.height * 0.7)
                         }
+                        .padding(.bottom, 15)
+                        .padding(.leading, 10)
+                        ScrollView(.vertical) {
+                            LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))], alignment: .center, spacing: 10) {
+                                //Grid of textures
+                                ForEach(allTextures, id: \.self) { texture in
+                                    Image(uiImage: texture)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .padding(10)
+                                        .overlay(alignment: .bottomTrailing) {
+                                            if partSelected != "" && textureSelected == texture {
+                                                Image(systemName: "checkmark.circle.fill")
+                                            } else {
+                                                Rectangle()
+                                                    .fill(.clear)
+                                            }
+                                        }
+                                        .onTapGesture {
+                                            if partSelected != "" {
+                                                if textureSelected == texture {
+                                                    textureSelected = UIImage()
+                                                    let elementToRemove = texturedSections.first(where: {$0.sectionName == partSelected})
+                                                    texturedSections.removeAll(where: {$0 == elementToRemove})
+                                                } else if texturedSections.filter({$0.sectionName == partSelected}) != [] {
+                                                    textureSelected = texture
+                                                    texturedSections[texturedSections.firstIndex(where: {$0.sectionName == partSelected})!].texture = textureSelected
+                                                } else {
+                                                    textureSelected = texture
+                                                    texturedSections.append(TexturedSection(sectionName: partSelected, texture: textureSelected))
+                                                }
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                        .padding(.leading, 10)
+                        .frame(width: geo.size.width * 0.3, height: geo.size.height * 0.7)
                     }
                     .scaledToFit()
                     .padding(.trailing, 10)
@@ -109,20 +105,10 @@ struct DesignEditView: View {
                                 .contentShape(.interaction, AnyShape(part.shape))
                                 .scaledToFit()
                                 .frame(maxWidth: geo.size.width * 0.6)
-                                //                            .scaleEffect(x: pinchScale, y: pinchScale)
-                                //                            .gesture(MagnificationGesture().updating($pinchScale) { (newValue, pinchScale, _) in
-                                //                                pinchScale = newValue
-                                //                            }
-                                //                            )
                                 .mask {
                                     Image(part.name)
                                         .scaledToFit()
                                         .frame(maxWidth: geo.size.width * 0.6)
-                                    //                                    .scaleEffect(x: pinchScale, y: pinchScale)
-                                    //                                    .gesture(MagnificationGesture().updating($pinchScale) { (newValue, pinchScale, _) in
-                                    //                                        pinchScale = newValue
-                                    //                                    }
-                                    //                                    )
                                 }
                                 .onTapGesture {
                                     if partSelected == part.name {
@@ -142,6 +128,7 @@ struct DesignEditView: View {
                         }
                     }
                 }
+                .navigationTitle(Text(parts.name))
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
